@@ -1,5 +1,6 @@
 import os
 from time import sleep
+from font import *
 
 
 
@@ -24,20 +25,59 @@ def read_file(path):
     f=open(path,"r")
     return f.read()
 
-def display_text(oled, data):
-    list_of_stroks = []
-    start = 0
-    while start < len(data):
-        end = start + 21
-        list_of_stroks.append(data[start:end])
-        start = end
+def display_text(oled,data,x=1,y=1):
+     
+    
+    original_x = x  # Сохраняем начальную позицию x для переноса
+    char_width = 8   # Ширина символа с учётом масштаба
+    char_height = 8   # Высота символа с учётом масштаба
+
+   
+
+    for char in data:
+            # Если символ выходит за границы экрана по ширине, переносим на новую строку
+        if x + char_width > 128:
+            x = original_x  # Возвращаемся к начальной позиции x
+            y += char_height  # Переходим на следующую строку
+
+          
+
+                # Если текст выходит за границы экрана по высоте, прекращаем вывод
+            if y + char_height > 64:
+                return  # Выходим из функции
+
+            # Отрисовываем символ
+        draw_char(oled,char, x, y)
+        x += char_width  # Сдвигаем позицию для следующего символа
     
     
-    last=1
-    for stroka in list_of_stroks:
-        oled.text(stroka,1,last,"AA")
-        last+=8
-    sleep(0.1)
+    
+
+
+def draw_char(oled,char,x,y):
+    if char in font:
+        char_data = font[char]
+        for row in range(8):
+            byte = char_data[row]
+            for col in range(8):
+                if byte & (1 << (7 - col)):
+                    oled.pixel(x + col, y + row, 1)
+    
+    
+#     
+#     list_of_stroks = []
+#     start = 0
+#     while start < len(data):
+#         end = start + 21
+#         list_of_stroks.append(data[start:end])
+#         start = end
+#     
+#     
+#     last=1
+#     for stroka in list_of_stroks:
+#         oled.text(stroka,1,last,"AA",font_name="Fontw8h5s1.bin")
+#         last+=8
+#     sleep(0.1)
     oled.show()
 
 
