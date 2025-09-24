@@ -1,5 +1,5 @@
 import os
-
+from time import sleep
 class listbox:
     def __init__(self,oled,path="/lib/SCHPORA/"):
         self.oled=oled
@@ -16,6 +16,9 @@ class listbox:
     
     
     def get_page_payloads(self):
+        if self.payloads_dict[0]=="NODATA":
+            return ["NODATA"]
+        
         for inde,lista in self.payloads_dict.items():
             if  inde==self.index_page:
                 self.page_payloads=lista
@@ -23,14 +26,25 @@ class listbox:
     def get_dir(self,path="/lib/SCHPORA"):
         payloads=os.listdir(path)
         payloads=sorted(payloads)
+        if len(payloads)==0:
+            return ["NODATA"]
         payloads_dict={}
         for i in range(0,len(payloads),5):
             payloads_dict[i//5]=payloads[i:i+5]
         return payloads_dict
     
-    
+    def get_element(self):
+        return self.page_payloads[self.index]
     
     def draw_listbox(self):
+        if self.payloads_dict[0]=="NODATA":
+            self.oled.clear()
+            self.oled.text("NO DATA!",30,30,"AA")
+            self.oled.show()
+            sleep(1)
+            self.oled.clear()
+            return "NODATA"
+            
         self.oled.clear()
         pos_y=10
         for index_en,item in enumerate(self.page_payloads):
@@ -40,6 +54,7 @@ class listbox:
             pos_y+=10;
             self.oled.text(f"{self.index_page+1}/{len(self.payloads_dict)}",100,5,"AAA")
         self.oled.show()
+        return None
     
     
     def down(self):
@@ -61,7 +76,6 @@ class listbox:
         self.index-=1
         
         if self.index == -1:
-            print("up")
             if self.index_page!=0:
                 self.index_page-=1
                 self.get_page_payloads()
@@ -76,5 +90,18 @@ class listbox:
         
                 
         self.draw_listbox()
+
+
+
+class file_system():
+    def __init__(self):
+        None
+    def get_file_type(self,path):
+        f=open(path,"r",encoding="utf-8")
+        data=f.readlines()
+        try:
+            return data[0]
+        except:
+            return "NO FILE TYPE"
         
         
