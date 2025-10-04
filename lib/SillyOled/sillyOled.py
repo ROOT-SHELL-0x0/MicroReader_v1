@@ -1,7 +1,7 @@
 import adafruit_ssd1306 as ssd1306
 import busio
 from math import sin, cos, radians
-from lib_funcs import *
+
 
 SIN_TABLE = [int(256 * sin(radians(i))) for i in range(360)]
 COS_TABLE = [int(256 * cos(radians(i))) for i in range(360)]
@@ -314,7 +314,7 @@ class SillyOled:
             utime.sleep_ms(delay)  # Задержка для плавности
     
     
-    def scroll_text_vertical(self, text,delay=50, direction="down"):
+    def scroll_text_vertical(self,delay=50, direction="down"):
         
         
         

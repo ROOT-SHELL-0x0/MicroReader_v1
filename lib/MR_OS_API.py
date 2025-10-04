@@ -1,7 +1,8 @@
 import os
 from time import sleep
 class listbox:
-    def __init__(self,oled,path="/lib/SCHPORA/"):
+    def __init__(self,type_of_obj,oled,path="/lib/SCHPORA/"):
+        self.type=type_of_obj
         self.oled=oled
         self.index=0
         self.index_page=0
@@ -36,7 +37,7 @@ class listbox:
     def get_element(self):
         return self.page_payloads[self.index]
     
-    def draw_listbox(self):
+    def draw(self):
         if self.payloads_dict[0]=="NODATA":
             self.oled.clear()
             self.oled.text("NO DATA!",30,30,"AA")
@@ -70,7 +71,7 @@ class listbox:
                 
             self.index = 0
         
-        self.draw_listbox()
+        self.draw()
     
     def up(self):
         self.index-=1
@@ -89,7 +90,7 @@ class listbox:
                 
         
                 
-        self.draw_listbox()
+        self.draw()
 
 
 
@@ -100,8 +101,34 @@ class file_system():
         f=open(path,"r",encoding="utf-8")
         data=f.readlines()
         try:
-            return data[0]
+            return data[0][5:].strip()
         except:
             return "NO FILE TYPE"
+        
+        
+    def read_file(self,path):
+        f=open(path,"r",encoding="utf-8")
+        lines=f.readlines()
+        data=""
+        for line in lines:
+            if "type" not in line:
+                data+=line
+        return data
+            
+class text:
+    def __init__(self,type_of_obj,oled,data):
+        self.type=type_of_obj
+        self.data=data
+        self.oled=oled
+        self.oled.clear()
+        self.oled.text(data,1,1)
+        self.oled.show()
+    
+    
+    
+    def up(self):
+        self.oled.scroll_text_vertical(direction="down")
+        self.oled.show()
+        
         
         

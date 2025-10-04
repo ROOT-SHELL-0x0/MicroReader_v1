@@ -11,17 +11,17 @@ from SillyOled.sillyoled import SillyOled
 from time import sleep
 
 
-power_pin=io.DigitalInOut(board.GP8)
+power_pin=io.DigitalInOut(board.GP10)
 power_pin.direction=io.Direction.OUTPUT
 power_pin.value=True
 
 
 
-power_pin_display=io.DigitalInOut(board.GP27)
+power_pin_display=io.DigitalInOut(board.GP4)
 power_pin_display.direction=io.Direction.OUTPUT
 power_pin_display.value=True
 
-gnd_pin=io.DigitalInOut(board.GP14)
+gnd_pin=io.DigitalInOut(board.GP5)
 gnd_pin.direction=io.Direction.OUTPUT
 gnd_pin.value=False
 
