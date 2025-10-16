@@ -3,6 +3,7 @@ from time import sleep
 class listbox:
     def __init__(self,type_of_obj,oled,path="/lib/SCHPORA/"):
         self.type=type_of_obj
+        self.path=path
         self.oled=oled
         self.index=0
         self.index_page=0
@@ -120,15 +121,21 @@ class text:
         self.type=type_of_obj
         self.data=data
         self.oled=oled
-        self.oled.clear()
-        self.oled.text(data,1,1)
-        self.oled.show()
     
     
     
-    def up(self):
+    def down(self):
         self.oled.scroll_text_vertical(direction="down")
         self.oled.show()
+    def up(self):
+        self.oled.scroll_text_vertical(direction="up")
+        self.oled.show()
+    def draw(self):
+        
+        self.oled.clear()
+        self.oled.text(self.data,1,1)
+        self.oled.show()
+        
         
         
         
